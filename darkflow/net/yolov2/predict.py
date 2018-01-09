@@ -3,6 +3,7 @@ import math
 import cv2
 import os
 import json
+from threading import Thread
 #from scipy.special import expit
 #from utils.box import BoundBox, box_iou, prob_compare
 #from utils.box import prob_compare2, box_intersection
@@ -39,7 +40,7 @@ def postprocess(self, net_out, im, save = True):
 		imgcv = cv2.imread(im)
 	else: imgcv = im
 	h, w, _ = imgcv.shape
-	
+
 	resultsForJSON = []
 	for b in boxes:
 		boxResults = self.process_box(b, h, w, threshold)
@@ -63,9 +64,14 @@ def postprocess(self, net_out, im, save = True):
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
+		if self.FLAGS.UDP:
+			Thread(sendUDPMessage, (textJSON)).start()
 		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)
 		return
 
 	cv2.imwrite(img_name, imgcv)
+
+def sendUDPMessage(self, textJSON):
+	self.socket.send(textJSON.encode())

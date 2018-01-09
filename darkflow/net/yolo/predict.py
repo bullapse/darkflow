@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import os
 import json
+from threading import Thread
 from ...cython_utils.cy_yolo_findboxes import yolo_box_constructor
 
 def _fix(obj, dims, scale, offs):
@@ -40,10 +41,10 @@ def process_box(self, b, h, w, threshold):
 def findboxes(self, net_out):
 	meta, FLAGS = self.meta, self.FLAGS
 	threshold = FLAGS.threshold
-	
+
 	boxes = []
 	boxes = yolo_box_constructor(meta, net_out, threshold)
-	
+
 	return boxes
 
 def preprocess(self, im, allobj = None):
@@ -115,9 +116,15 @@ def postprocess(self, net_out, im, save = True):
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
+		if self.FLAGS.UDP:
+			Thread(sendUDPMessage, (textJSON)).start()
 		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)
-		return	
+		return
 
 	cv2.imwrite(img_name, imgcv)
+
+
+def sendUDPMessage(self, textJSON):
+	self.socket.send(textJSON.encode())

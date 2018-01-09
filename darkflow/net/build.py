@@ -6,6 +6,7 @@ from .ops import op_create, identity
 from .ops import HEADER, LINE
 from .framework import create_framework
 from ..dark.darknet import Darknet
+from socket import socket, AF_INET, SOCKET_DGRAM
 import json
 import os
 

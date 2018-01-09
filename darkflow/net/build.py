@@ -6,7 +6,7 @@ from .ops import op_create, identity
 from .ops import HEADER, LINE
 from .framework import create_framework
 from ..dark.darknet import Darknet
-from socket import socket, AF_INET, SOCKET_DGRAM
+from socket import socket, AF_INET, SOCK_STREAM
 import json
 import os
 
@@ -66,7 +66,7 @@ class TFNet(object):
 				self.FLAGS.port = 48051
 			self.say('\nCreating UDP broadcast socket on: ' +
 				str(self.FLAGS.address) + ':' + str(self.FLAGS.port))
-			self.socket = socket(AF_INET, SOCKET_DGRAM)
+			self.socket = socket(AF_INET, SOCK_STREAM)
 			self.socket.bind((self.FLAGS.address, self.FLAGS.port))
 
 		self.darknet = darknet

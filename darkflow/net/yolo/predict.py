@@ -110,7 +110,7 @@ def postprocess(self, net_out, im, save = True):
 			thick // 3)
 
 
-	if not save: return imgcv
+	# if not save: return imgcv
 
 	outfolder = os.path.join(self.FLAGS.imgdir, 'out')
 	img_name = os.path.join(outfolder, os.path.basename(im))

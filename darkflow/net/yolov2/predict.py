@@ -58,7 +58,7 @@ def postprocess(self, net_out, im, save = True):
 		cv2.putText(imgcv, mess, (left, top - 12),
 			0, 1e-3 * h, colors[max_indx],thick//3)
 
-	if not save: return imgcv
+	# if not save: return imgcv
 
 	outfolder = os.path.join(self.FLAGS.imgdir, 'out')
 	img_name = os.path.join(outfolder, os.path.basename(im))

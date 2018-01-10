@@ -45,7 +45,7 @@ def constructor(self, meta, FLAGS):
 			self.FLAGS.address = '0.0.0.0'
 		if self.FLAGS.port is None:
 			self.FLAGS.port = 48051
-		self.say('\nCreating UDP broadcast socket on: ' +
+		print('\nCreating UDP broadcast socket on: ' +
 			str(self.FLAGS.address) + ':' + str(self.FLAGS.port))
 		self.socket = socket(AF_INET, SOCK_STREAM)
 		self.socket.bind((self.FLAGS.address, self.FLAGS.port))

@@ -58,14 +58,16 @@ def postprocess(self, net_out, im, save = True):
 		cv2.putText(imgcv, mess, (left, top - 12),
 			0, 1e-3 * h, colors[max_indx],thick//3)
 
-	# if not save: return imgcv
+	if self.FLAGS.UDP:
+		textJSON = json.dumps(resultsForJSON)
+		Thread(sendUDPMessage, (textJSON,)).start()
+
+	if not save: return imgcv
 
 	outfolder = os.path.join(self.FLAGS.imgdir, 'out')
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
-		if self.FLAGS.UDP:
-			Thread(sendUDPMessage, (textJSON)).start()
 		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)

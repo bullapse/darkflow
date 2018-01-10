@@ -109,8 +109,11 @@ def postprocess(self, net_out, im, save = True):
 			0, 1e-3 * h, self.meta['colors'][max_indx],
 			thick // 3)
 
+	if self.FLAGS.UDP:
+		textJSON = json.dumps(resultsForJSON)
+		Thread(sendUDPMessage, (textJSON,)).start()
 
-	# if not save: return imgcv
+	if not save: return imgcv
 
 	outfolder = os.path.join(self.FLAGS.imgdir, 'out')
 	img_name = os.path.join(outfolder, os.path.basename(im))

@@ -60,7 +60,8 @@ def postprocess(self, net_out, im, save = True):
 
 	if self.FLAGS.UDP:
 		textJSON = json.dumps(resultsForJSON)
-		Thread(sendUDPMessage, (textJSON,)).start()
+		t = Thread(sendUDPMessage, (textJSON,))
+		t.start()
 
 	if not save: return imgcv
 

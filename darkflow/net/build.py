@@ -59,16 +59,6 @@ class TFNet(object):
 			darknet = Darknet(FLAGS)
 			self.ntrain = len(darknet.layers)
 
-		if self.FLAGS.UDP is not None:
-			if self.FLAGS.address is None:
-				self.FLAGS.address = '0.0.0.0'
-			if self.FLAGS.port is None:
-				self.FLAGS.port = 48051
-			self.say('\nCreating UDP broadcast socket on: ' +
-				str(self.FLAGS.address) + ':' + str(self.FLAGS.port))
-			self.socket = socket(AF_INET, SOCK_STREAM)
-			self.socket.bind((self.FLAGS.address, self.FLAGS.port))
-
 		self.darknet = darknet
 		args = [darknet.meta, FLAGS]
 		self.num_layer = len(darknet.layers)

@@ -26,12 +26,25 @@ def constructor(self, meta, FLAGS):
 	# assign a color for each label
 	colors = list()
 	base = int(np.ceil(pow(meta['classes'], 1./3)))
-	for x in range(len(meta['labels'])): 
+	for x in range(len(meta['labels'])):
 		colors += [_to_color(x, base)]
 	meta['colors'] = colors
 	self.fetch = list()
 	self.meta, self.FLAGS = meta, FLAGS
+	if socket is not None:
+		self.socket = socket
 
 	# over-ride the threshold in meta if FLAGS has it.
 	if FLAGS.threshold > 0.0:
 		self.meta['thresh'] = FLAGS.threshold
+
+	# Create the UDP socket dependent on Flags
+	if self.FLAGS.UDP is not None:
+		if self.FLAGS.address is None:
+			self.FLAGS.address = '0.0.0.0'
+		if self.FLAGS.port is None:
+			self.FLAGS.port = 48051
+		self.say('\nCreating UDP broadcast socket on: ' +
+			str(self.FLAGS.address) + ':' + str(self.FLAGS.port))
+		self.socket = socket(AF_INET, SOCK_STREAM)
+		self.socket.bind((self.FLAGS.address, self.FLAGS.port))

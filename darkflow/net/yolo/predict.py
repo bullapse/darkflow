@@ -111,7 +111,7 @@ def postprocess(self, net_out, im, save = True):
 
 	if self.FLAGS.UDP:
 		textJSON = json.dumps(resultsForJSON)
-		t = Thread(target=sendUDPMessage, args=(self, textJSON,))
+		t = Thread(target=sendUDPMessage, args=(self, textJSON,)).start()
 		t.start()
 
 	if not save: return imgcv
@@ -120,14 +120,11 @@ def postprocess(self, net_out, im, save = True):
 	img_name = os.path.join(outfolder, os.path.basename(im))
 	if self.FLAGS.json:
 		textJSON = json.dumps(resultsForJSON)
-		if self.FLAGS.UDP:
-			Thread(sendUDPMessage, (textJSON)).start()
 		textFile = os.path.splitext(img_name)[0] + ".json"
 		with open(textFile, 'w') as f:
 			f.write(textJSON)
 
 	cv2.imwrite(img_name, imgcv)
-
 
 def sendUDPMessage(self, textJSON):
 	self.socket.send(textJSON.encode())

@@ -2,6 +2,7 @@ from . import train
 from . import predict
 from . import data
 from . import misc
+from socket import socket, AF_INET, SOCK_STREAM
 import numpy as np
 
 

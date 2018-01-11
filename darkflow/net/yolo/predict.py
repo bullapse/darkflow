@@ -97,7 +97,7 @@ def postprocess(self, net_out, im, save = True):
 		left, right, top, bot, mess, max_indx, confidence = boxResults
 		thick = int((h + w) // 300)
 		if self.FLAGS.json:
-			resultsForJSON.append({"label": mess, "confidence": float('%.2f' % confidence), "topleft": {"x": left, "y": top}, "bottomright": {"x": right, "y": bot}})
+			resultsForJSON.append({"label": mess, "color": self.meta['colors'][max_indx], "confidence": float('%.2f' % confidence), "maxY": im.shape[1], "maxX": im.shape[0], "topleft": {"x": left, "y": top}, "bottomright": {"x": right, "y": bot}})
 			continue
 
 		cv2.rectangle(imgcv,

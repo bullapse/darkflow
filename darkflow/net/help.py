@@ -65,25 +65,25 @@ def _get_fps(self, frame):
     processed = self.framework.postprocess(net_out, frame, False)
     return timer() - start
 
-def camera(self):
+def camera(self, cameraNum=0):
     file = self.FLAGS.demo
     SaveVideo = self.FLAGS.saveVideo
     
     if file == 'camera':
-        file = 0
+        file = cameraNum
     else:
         assert os.path.isfile(file), \
         'file {} does not exist'.format(file)
         
     camera = cv2.VideoCapture(file)
     
-    if file == 0:
+    if file in range(5):
         self.say('Press [ESC] to quit demo')
         
     assert camera.isOpened(), \
     'Cannot capture source'
     
-    if file == 0:#camera window
+    if file in range(5):#camera window
         cv2.namedWindow('', 0)
         _, frame = camera.read()
         height, width, _ = frame.shape
@@ -94,7 +94,7 @@ def camera(self):
 
     if SaveVideo:
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        if file == 0:#camera window
+        if file in range(5):#camera window
           fps = 1 / self._get_fps(frame)
           if fps < 1:
             fps = 1
@@ -130,7 +130,7 @@ def camera(self):
                     single_out, img, False)
                 if SaveVideo:
                     videoWriter.write(postprocessed)
-                if file == 0: #camera window
+                if file in range(5): #camera window
                     cv2.imshow('', postprocessed)
             # Clear Buffers
             buffer_inp = list()
@@ -141,7 +141,7 @@ def camera(self):
             sys.stdout.write('{0:3.3f} FPS'.format(
                 elapsed / (timer() - start)))
             sys.stdout.flush()
-        if file == 0: #camera window
+        if file in range(5): #camera window
             choice = cv2.waitKey(1)
             if choice == 27: break
 
@@ -149,7 +149,7 @@ def camera(self):
     if SaveVideo:
         videoWriter.release()
     camera.release()
-    if file == 0: #camera window
+    if file in range(5): #camera window
         cv2.destroyAllWindows()
 
 def to_darknet(self):
